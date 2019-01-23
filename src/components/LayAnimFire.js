@@ -6,35 +6,37 @@ import {
   StyleSheet,
   LayoutAnimation,
   Dimensions,
-  TextInput,UIManager
+  TextInput,
+  UIManager
 } from "react-native";
 
-
+import LayAnimGallery from "./LayAnimGallery";
 
 // const { UIManager } = useNativeModules;
-
 
 //  const deviceWidth = Dimenssion.get('window').width
 let deviceX = Dimensions.get("window").width;
 export default class LayAnimFire extends Component {
   constructor(props) {
     super(props);
-    
-UIManager.setLayoutAnimationEnabledExperimental &&
-UIManager.setLayoutAnimationEnabledExperimental(true);
+
+    UIManager.setLayoutAnimationEnabledExperimental &&
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+
     this.state = {
-      widthX: 0
+      widthX: 0,
+      isShowProgress: true
     };
   }
   layanimeconfig = {
     duration: 1000,
     create: {
-      type: "easeOut",
+      type: "linear",
       duration: 1000,
       delay: 500,
       // initialVelocity:20,
       // springDamping: 0.3,
-      property: "scaleX"
+      property: "scaleXY"
     },
     update: {
       type: "spring",
@@ -43,7 +45,7 @@ UIManager.setLayoutAnimationEnabledExperimental(true);
       // initialVelocity:100,
 
       springDamping: 0.8,
-      property: "opacity"
+      property: "scaleX"
     },
     delete: {
       type: "easeOut",
@@ -52,80 +54,92 @@ UIManager.setLayoutAnimationEnabledExperimental(true);
       // initialVelocity:1,
 
       // springDamping: 0.3,
-      property: "scaleXY"
+      property: "opacity"
     }
   };
 
   makeitRain = input => {
-    let rand = Math.floor(Math.random() * (deviceX - 100)) - 100;
+    let rand = Math.floor(Math.random() * (deviceX - 150)) + 150;
 
     LayoutAnimation.configureNext(this.layanimeconfig);
     if (input > 0) {
-      this.setState({ widthX: deviceX * (input / 100) });
-    } else if(input==='r'){
-      this.setState({ widthX: rand });
-    }else{
-      this.setState({ widthX: 0 });
-
+      this.setState({ isShowProgress:true,widthX: deviceX * (input / 100) -50});
+    } else if (input === "r") {
+      this.setState({ isShowProgress:true,widthX: rand });
+    } else {
+      this.setState({ isShowProgress: false });
     }
   };
 
-  
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.Wrapper}>
           <View style={styles.progressParent}>
-            <View
+            {this.state.isShowProgress && <View
               // onPress={this.makeitRain}
               // underlayColor="rgba(75,75,75,0.8)"
-              style={[styles.progressBar, { width: this.state.widthX ,backgroundColor:this.state.widthX===deviceX*(50/100)?'gold':this.state.widthX<deviceX*(50/100)?'rgba(255,100,100,1.0)':'lime'}]}
+              style={[
+                styles.progressBar,
+                {
+                  width: this.state.widthX,
+                  backgroundColor:
+                    // this.state.widthX >deviceX * (45/ 100)-50 && this.state.widthX < deviceX * (55/ 100)-50
+                    //   ? "gold"
+                    //   ? this.state.widthX < deviceX * (45 / 100)
+                    //   : "rgba(255,100,100,1.0)"
+                    //   : this.state.widthX > deviceX * (55 / 100) ? "lime":"rgba(255,100,100,1.0)"
+
+                    (this.state.widthX < deviceX * (45/ 100)-50 ) ?"rgba(255,100,100,1.0)": (this.state.widthX > deviceX * (45/ 100)-50 && this.state.widthX < deviceX * (65/ 100)-50 ) ?'gold':'lime' 
+                }
+              ]}
             >
               <Text />
-            </View>
+            </View>}
           </View>
           <View style={styles.buttonsWrapper}>
-          <TouchableHighlight
-            onPress={()=>this.makeitRain(50)}
-            underlayColor="rgba(75,75,75,0.8)"
-            style={styles.buttonStyles}
-          >
-            <Text style={styles.ButtonTxt}>50%</Text>
-          </TouchableHighlight>
+            <TouchableHighlight
+              onPress={() => this.makeitRain(50)}
+              underlayColor="rgba(75,75,75,0.8)"
+              style={styles.buttonStyles}
+            >
+              <Text style={styles.ButtonTxt}>50%</Text>
+            </TouchableHighlight>
 
-          <TouchableHighlight
-            onPress={()=>this.makeitRain(100)}
-            underlayColor="rgba(75,75,75,0.8)"
-            style={styles.buttonStyles}
-          >
-            <Text style={styles.ButtonTxt}>100%</Text>
-          </TouchableHighlight>
+            <TouchableHighlight
+              onPress={() => this.makeitRain(100)}
+              underlayColor="rgba(75,75,75,0.8)"
+              style={styles.buttonStyles}
+            >
+              <Text style={styles.ButtonTxt}>100%</Text>
+            </TouchableHighlight>
 
-          <TouchableHighlight
-            onPress={()=>this.makeitRain('r')}
-            underlayColor="rgba(75,75,75,0.8)"
-            style={styles.buttonStyles}
-          >
-            <Text style={styles.ButtonTxt}>Random</Text>
-          </TouchableHighlight>
+            <TouchableHighlight
+              onPress={() => this.makeitRain("r")}
+              underlayColor="rgba(75,75,75,0.8)"
+              style={styles.buttonStyles}
+            >
+              <Text style={styles.ButtonTxt}>Random</Text>
+            </TouchableHighlight>
 
-          <TouchableHighlight
-            onPress={()=>this.makeitRain(25)}
-            underlayColor="rgba(75,75,75,0.8)"
-            style={styles.buttonStyles}
-          >
-            <Text style={styles.ButtonTxt}>25%</Text>
-          </TouchableHighlight>
+            <TouchableHighlight
+              onPress={() => this.makeitRain(25)}
+              underlayColor="rgba(75,75,75,0.8)"
+              style={styles.buttonStyles}
+            >
+              <Text style={styles.ButtonTxt}>25%</Text>
+            </TouchableHighlight>
 
-          <TouchableHighlight
-            onPress={()=>this.makeitRain(0)}
-            underlayColor="rgba(75,75,75,0.8)"
-            style={styles.buttonStyles}
-          >
-            <Text style={styles.ButtonTxt}>reset Bar</Text>
-          </TouchableHighlight>
+            <TouchableHighlight
+              onPress={() => this.makeitRain(0)}
+              underlayColor="rgba(75,75,75,0.8)"
+              style={styles.buttonStyles}
+            >
+              <Text style={styles.ButtonTxt}>reset Bar</Text>
+            </TouchableHighlight>
           </View>
         </View>
+        <LayAnimGallery />
       </View>
     );
   }
@@ -139,10 +153,10 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   Wrapper: {
-    flex: 0.5,
+    flex: 1,
     backgroundColor: "#444",
     justifyContent: "center",
-    alignItems: 'center',
+    alignItems: "center"
     // flexDirection: 'row',
   },
   progressParent: {
@@ -150,7 +164,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(100,100,255,0.5)",
     borderRadius: 50,
     justifyContent: "center",
-    width:deviceX
+    width: deviceX - 50
   },
   progressBar: {
     backgroundColor: "#77f",
@@ -160,22 +174,20 @@ const styles = StyleSheet.create({
   buttonStyles: {
     width: 100,
     height: 100,
-    borderRadius:50,
-    borderWidth:5,
-    borderColor:'#33c',
+    borderRadius: 50,
+    borderWidth: 5,
+    borderColor: "#33c",
     backgroundColor: "#99f",
     // alignSelf: "center",
-    justifyContent: 'center',
-    alignItems: 'center',
-    elevation:10
-
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 10
   },
-  buttonsWrapper:{
-    flexDirection:'row'
+  buttonsWrapper: {
+    flexDirection: "row"
   },
-  ButtonTxt:{
-    color:'#333',
-    fontWeight:'800',
-
+  ButtonTxt: {
+    color: "#333",
+    fontWeight: "800"
   }
 });
