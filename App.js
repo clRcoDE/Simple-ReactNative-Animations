@@ -11,7 +11,7 @@ import {Platform, StyleSheet, Text, View} from 'react-native';
 import LayAnimFire from './src/components/LayAnimFire';
 import FireLights from './src/components/FireLights'
 import LayMyMenu from './src/components/LayMyManu';
-
+import Loading from './src/components/Loading'
 export default class App extends Component {
   render() {
     return (
@@ -19,6 +19,8 @@ export default class App extends Component {
         {/* <LayAnimFire /> */}
         {/* <FireLights/> */}
         {/* <LayMyMenu/> */}
+        <Loading load={true}/>
+
       </View>
     );
   }

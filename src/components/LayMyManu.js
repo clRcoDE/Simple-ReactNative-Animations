@@ -21,6 +21,12 @@ export default class LayMyMenu extends Component {
   }
   configfile = {
     duration: 1000,
+    create:{
+      type: "easeIn",
+      property: "scaleXY",
+    //   springDamping: 0.2,
+      duration: 500
+    },
     update: {
       type: "easeOut",
       property: "scaleXY",
@@ -31,27 +37,13 @@ export default class LayMyMenu extends Component {
     delete:{
         type:'easeIn',
         // springDamping:0.5,
-        property:'opacity',
+        property:'scaleXY',
         duration:200
     }
 
 
   };
-  configmenuUp = {
-    duration: 1000,
-    create: {
-        type: "spring",
-        property: "scaleXY",
-        springDamping: 0.5,
-        duration: 1000
-    },
-    update: {
-      type: "spring",
-      property: "scaleXY",
-      springDamping: 0.5,
-      duration: 1000
-    },
-  };
+
   openUp = () => {
     LayoutAnimation.configureNext(this.configmenuUp);
     // this.setState({})
@@ -61,18 +53,18 @@ export default class LayMyMenu extends Component {
   openMenu = () => {
     LayoutAnimation.configureNext(this.configfile);
 
-    this.setState(prev => ({ toggleMenu: !prev.toggleMenu ,  }),()=>{this.state.toggleMenu?this.setState({heightX:300}):this.setState({heightX:0})});
+    this.setState(prev => ({ toggleMenu: !prev.toggleMenu ,  }));
   };
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.packetWrapper}>
-        <View style={[styles.menuParent,{height:this.state.heightX}]}>
+        {this.state.toggleMenu && <View style={[styles.menuParent]}>
         <View><Text>Trends</Text></View>
         <View><Text>Bio</Text></View>
         <View><Text>About</Text></View>
         <View><Text>Wroks</Text></View>
-        </View>
+        </View>}
           <TouchableHighlight
             underlayColor="#ccc"
             onPress={this.openMenu}
@@ -145,6 +137,7 @@ const styles = StyleSheet.create({
 
   },
   menuParent:{
+    height:300,
       width:196,
       backgroundColor:'#fff',
       position: 'absolute',
